@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace写UserMapper的全限定名，为哪个mapper服务需要在这里体现-->
+<mapper namespace="com.nowcoder.community.dao.UserMapper">
+
+    <!--下面三个方法如果要增加参数，三个方法都要添加很麻烦，可以进行提炼-->
+    <sql id="insertFields">
+        username, password, salt, email, type, status, activation_code, header_url, create_time
+    </sql>
+
+    <sql id="selectFields" >
+        id, username, password, salt, email, type, status, activation_code, header_url, create_time
+    </sql>
+
+
+    <!--在这里写各种标签，每一个标签要对应一个接口中的方法-->
+    <!--id要写对应的方法的名字, resultType是返回的类型声明，本来要写全限定名，
+    但在application.properties已经写了entity会放在哪里所以只要写User-->
+    <!--#{id}就是方法中对应的参数，不要在select标签中写带有#{}的注释，否则会出错-->
+    <select id="selectById" resultType="User">
+        select <include refid="selectFields"></include>
+        from user
+        where id = #{id}
+    </select>
+
+    <!--#{id}就是方法中对应的参数-->
+    <select id="selectByName" resultType="User">
+        select id, username, password, salt, email, type, status, activation_code, header_url, create_time
+        from user
+
+        where username = #{username}
+    </select>
+
+    <!--#{id}就是方法中对应的参数-->
+    <select id="selectByEmail" resultType="User">
+        select id, username, password, salt, email, type, status, activation_code, header_url, create_time
+        from user
+        where email = #{email}
+    </select>
+    <!--需要声明增加的是什么参数，简单的参数可以不用声明，
+    复杂的参数比如bean就需要声明，否则识别不了，因为他不是java自带的类型
+    keyProperty要写主键属性对应的名字
+    values里要写user实体里的属性名
+    -->
+    <insert id="insertUser" parameterType="User" keyProperty="id">
+        insert into user (<include refid="insertFields"></include>)
+        values (#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
+    </insert>
+
+    <update id="updateStatus">
+        update user set status = #{status} where id = #{id}
+    </update>
+
+    <update id="updateHeader">
+        update user set header_url = #{headerUrl} where id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        update user set password = #{password} where id = #{id}
+    </update>
+
+
+
+
+
+</mapper>

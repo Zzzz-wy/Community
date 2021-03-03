@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace写类的全限定名，为哪个mapper服务需要在这里体现-->
+<mapper namespace="com.nowcoder.community.dao.DiscussPostMapper">
+
+    <sql id="selectFields">
+        id, user_id, title, content, type, status, create_time, comment_count, score
+    </sql>
+    <!--只需要声明DiscussPost类型，不用声明list类型，因为list能检测到，是java自带的类型，它能够解析出来-->
+    <!--if标签中的test是判断条件-->
+    <!--要分清哪些是字段哪些是参数,user_id是字段，#{userId}是参数-->
+    <select id="selectDiscussPosts" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from discuss_post
+        where status != 2
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        order by type desc, create_time desc 
+        limit #{offset}, #{limit}
+    </select>
+    <select id="selectDicussPostRows" resultType="int">
+        select count(id)
+        from discuss_post
+        where status != 2
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+    </select>
+    
+</mapper>
