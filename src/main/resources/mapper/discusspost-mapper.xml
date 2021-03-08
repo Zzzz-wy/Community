@@ -21,7 +21,7 @@
         order by type desc, create_time desc 
         limit #{offset}, #{limit}
     </select>
-    <select id="selectDicussPostRows" resultType="int">
+    <select id="selectDiscussPostRows" resultType="int">
         select count(id)
         from discuss_post
         where status != 2
