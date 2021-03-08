@@ -87,7 +87,7 @@ public class LoginController implements CommunityConstant {
     }
 
     @RequestMapping(path = "/kaptcha", method = RequestMethod.GET)
-    //生成玩验证码，服务器要记住才能验证对不对，存在浏览器端安全有隐患，因此存在session
+    //生成完验证码，服务器要记住才能验证对不对，存在浏览器端安全有隐患，因此存在session
     public void getKaptcha(HttpServletResponse response, HttpSession session) {
         //生成验证码
         String text = kaptchaProducer.createText();
